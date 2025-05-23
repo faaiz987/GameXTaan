@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, X, Volume2, VolumeX, ShoppingBag, Gamepad2, MonitorSmartphone, Headset, Disc3, Joystick } from 'lucide-react';
+import { Menu, X, Volume2, VolumeX, Gamepad2, MonitorSmartphone, Headset, Disc3, Joystick } from 'lucide-react';
 import './index.css'; // or './globals.css'
 
 
@@ -99,10 +99,10 @@ const App: React.FC = () => {
     {
       id: 'ps5',
       name: 'PlayStation Store',
-      icon: <Gamepad2 className="w-8 h-8" />,
+      icon: <MonitorSmartphone className="w-8 h-8" />,
       position: { x: 13, y: 24 },
       link: 'https://www.zara.com',
-      description: 'Trendy fashion and accessories',
+      description: 'PS5 Store for unique gadgets',
       background: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&q=80',
     },
     {
@@ -111,12 +111,30 @@ const App: React.FC = () => {
       icon: <MonitorSmartphone className="w-8 h-8" />,
       position: { x: 83, y: 24 },
       link: 'https://www.apple.com',
-      description: 'Latest gadgets and electronics',
+      description: 'Xbox Store for unique gadgets',
       background: 'https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&q=80',
     },
     {
+      id: 'ps5-console',
+      name: 'PlayStation Console',
+      icon: <Gamepad2 className="w-8 h-8" />,
+      position: { x: 13, y: 38 },
+      link: 'https://www.zara.com',
+      description: 'PS5 Console and accessories',
+      background: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&q=80',
+    },
+    {
+      id: 'xbox-console',
+      name: 'XBox Console',
+      icon: <Gamepad2 className="w-8 h-8" />,
+      position: { x: 83, y: 38 },
+      link: 'ttps://www.apple.com',
+      description: 'Xbox Console and accessories',
+      background: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&q=80',
+    },
+    {
       id: 'vr',
-      name: 'vr Store',
+      name: 'VR Store',
       icon: <Headset className="w-8 h-8" />,
       position: { x: 47.5, y: 59 },
       link: 'https://www.starbucks.com',
@@ -127,18 +145,36 @@ const App: React.FC = () => {
       id: 'xbox-games',
       name: 'Xbox Games',
       icon: <Joystick className="w-8 h-8" />,
-      position: { x: 83, y: 70 },
+      position: { x: 83, y: 55 },
       link: 'https://www.rolex.com',
-      description: 'Premium watches and jewelry',
+      description: 'Xbox games to play',
       background: 'https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&q=80',
     },
     {
       id: 'ps-games',
-      name: 'PS Games',
+      name: 'Xbox Games',
+      icon: <Joystick className="w-8 h-8" />,
+      position: { x: 13, y: 55 },
+      link: 'https://www.rolex.com',
+      description: 'PS games to play',
+      background: 'https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&q=80',
+    },
+    {
+      id: 'xbox-accessories',
+      name: 'Xbox Accessories',
+      icon: <Disc3 className="w-8 h-8" />,
+      position: { x: 83, y: 70 },
+      link: 'https://www.rolex.com',
+      description: 'PS accessories and peripherals',
+      background: 'https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&q=80',
+    },
+    {
+      id: 'ps-assessories',
+      name: 'PS Accessories',
       icon: <Disc3 className="w-8 h-8" />,
       position: { x: 13, y: 70 },
       link: 'https://www.amazon.com/books',
-      description: 'Books and stationery',
+      description: 'xbox accessories and peripherals',
       background: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80',
     },
   ];
