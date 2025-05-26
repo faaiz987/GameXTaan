@@ -14,10 +14,17 @@ interface Shop {
   background: string;
 }
 
-const LoopLast7SecondsVideo: React.FC<{ isMuted: boolean }> = ({ isMuted }) => {
+const LoopLast7SecondsVideo: React.FC<{
+  isMuted: boolean;
+  onReach18Seconds: () => void;
+  videoSrc: string;
+}> = ({ onReach18Seconds, videoSrc }) => {
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
   const [hasLoopStarted, setHasLoopStarted] = useState(false);
+  const [hasReached18s, setHasReached18s] = useState(false); // New state
+
 
   useEffect(() => {
     const video = videoRef.current;
@@ -32,14 +39,19 @@ const LoopLast7SecondsVideo: React.FC<{ isMuted: boolean }> = ({ isMuted }) => {
 
       const loopStart = duration - 7.8;
 
-      // If video finished playing for the first time, start looping from last 7s
+      // ✅ Trigger callback when currentTime >= 18
+      if (!hasReached18s && video.currentTime >= 18) {
+        setHasReached18s(true);
+        onReach18Seconds();
+      }
+
+      // Loop logic
       if (!hasLoopStarted && video.currentTime >= duration) {
         setHasLoopStarted(true);
         video.currentTime = loopStart;
         video.play().catch(() => {});
       }
 
-      // When already looping: keep replaying last 7 seconds
       if (hasLoopStarted && video.currentTime >= duration) {
         video.currentTime = loopStart;
         video.play().catch(() => {});
@@ -48,15 +60,13 @@ const LoopLast7SecondsVideo: React.FC<{ isMuted: boolean }> = ({ isMuted }) => {
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
     video.addEventListener('timeupdate', handleTimeUpdate);
-
-    // Manual attempt to play (to trigger autoplay on some browsers)
     video.play().catch(() => {});
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('timeupdate', handleTimeUpdate);
     };
-  }, [duration, hasLoopStarted]);
+  }, [duration, hasLoopStarted, hasReached18s]);
 
   return (
     <video
@@ -65,11 +75,12 @@ const LoopLast7SecondsVideo: React.FC<{ isMuted: boolean }> = ({ isMuted }) => {
       autoPlay
       playsInline
       className="absolute inset-0 w-full h-full object-cover z-[-1]"
-      src="/assets/videos/background.mp4"
+      src={videoSrc}
     />
 
   );
 };
+
 
 
 const App: React.FC = () => {
@@ -84,6 +95,7 @@ const App: React.FC = () => {
   const [isSoundAnimating, setIsSoundAnimating] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [showShopIcons, setShowShopIcons] = useState(false);
+  const [useAlternateVideo, setUseAlternateVideo] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -152,7 +164,7 @@ const App: React.FC = () => {
     },
     {
       id: 'ps-games',
-      name: 'Xbox Games',
+      name: 'PS Games',
       icon: <Joystick className="w-8 h-8" />,
       position: { x: 13, y: 55 },
       link: 'https://www.rolex.com',
@@ -191,16 +203,28 @@ const App: React.FC = () => {
     setIsTransitioning(true);
     setSelectedShop(null);
     setCameraPosition({ x: 50, y: 50 });
-    setTimeout(() => setCurrentBackground('/assets/videos/background.mp4'), 300);
+
+    // Switch to background2.mp4
+    setTimeout(() => {
+      setUseAlternateVideo(true); // ✅ set alternate video
+      setCurrentBackground('/assets/videos/background2.mp4');
+    }, 300);
+
     setTimeout(() => setIsTransitioning(false), 1000);
   };
+
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         {selectedShop === null && isMounted ? (
-          <LoopLast7SecondsVideo isMuted={isMuted} />
+          <LoopLast7SecondsVideo
+            isMuted={isMuted}
+            onReach18Seconds={() => setShowShopIcons(true)}
+            videoSrc={useAlternateVideo ? '/assets/videos/background2.mp4' : '/assets/videos/background.mp4'}
+          />
+
         ) : (
           <div
             className="absolute inset-0 transition-opacity duration-1000"
